@@ -743,7 +743,7 @@ void set_Bomb_Boom(int arrX, int arrY)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); // »¡°­
 
 	printf("  ");
-	SetCurrentCursorPos(cursorX, cursorY);
+	SetCurrentCursorPos(cursorX, cursorY);	
 	printf("¢Í");
 
 	SetCurrentCursorPos(pre.X, pre.Y);

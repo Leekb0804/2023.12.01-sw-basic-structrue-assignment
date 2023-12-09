@@ -186,6 +186,7 @@ int NpcMoving(int npc_speed_phase)
 
 			if (current_game_time - NPC_current_Time > time_limit) {
 				if (npc1_bomb_exist_count < npc1_bomb_max) {
+					Beep(523.2511, 250); // ÆøÅº¼³Ä¡ È¿°úÀ½
 					npc1_set_bomb();
 				}
 				//NPCmapModel[dstY][dstX] = STATE_NPC_WARNING;

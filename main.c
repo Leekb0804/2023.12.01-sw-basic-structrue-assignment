@@ -16,6 +16,8 @@
 #include "calculatorDST3.h"
 #include "stage_image.h"
 
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 int npc2_Life_flag = 1;
 int npc3_Life_flag = 2;
@@ -88,7 +90,7 @@ int main(void)
 
 	NPC_current_Time = 0;
 
-	for (game_round = 2; game_round < 6; game_round++)
+	for (game_round = 0; game_round < 6; game_round++)
 	{
 		bomb_max = 1;
 		player_bomb_len = 1;
@@ -124,6 +126,7 @@ int main(void)
 
 		if (game_round == 0)
 		{
+			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지1 브금
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -140,6 +143,8 @@ int main(void)
 		}
 		else if (game_round == 1)
 		{
+			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지2 브금
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -155,6 +160,8 @@ int main(void)
 		}
 		else if (game_round == 2)
 		{
+			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지3 브금
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -170,6 +177,8 @@ int main(void)
 		}
 		else if (game_round == 3)
 		{
+			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지4 브금
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -185,6 +194,8 @@ int main(void)
 		}
 		else if (game_round == 4)
 		{
+			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지5 브금
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -200,6 +211,8 @@ int main(void)
 		}
 		else if (game_round == 5)
 		{
+			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC || SND_LOOP); // 스테이지6 브금
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();

@@ -227,7 +227,10 @@ void ProcessKeyInput()
 			break;
 		case SPACE_BAR:
 			if (bomb_exist_count < bomb_max && checkObject_exist_bomb(PlayerCurPosX, PlayerCurPosY) == 0)
+			{
+				Beep(523.2511, 250); // ÆøÅº¼³Ä¡ È¿°úÀ½
 				SetPlayerBomb();
+			}
 			break;
 		default:
 			break;
