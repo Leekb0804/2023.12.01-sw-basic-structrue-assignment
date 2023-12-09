@@ -178,6 +178,7 @@ int NpcMoving2(int npc_speed_phase)
 
 			if (current_game_time - NPC_current_Time2 > time_limit) {
 				if (npc2_bomb_exist_count < npc2_bomb_max) {
+					Beep(523.2511, 250); // ÆøÅº¼³Ä¡ È¿°úÀ½
 					npc2_set_bomb();
 				}
 				NPC_current_Time2 = clock();
