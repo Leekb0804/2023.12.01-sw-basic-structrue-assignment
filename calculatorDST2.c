@@ -75,14 +75,14 @@ void NPCavoidBOMB2(Queue2* safety, int x, int y) {
 			int ny = safety[front2].y + dy2[i];
 			if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
 				if (visited2[ny][nx] == 0 &&
-					mapModel[ny][nx] != STATE_BOMB_SETTING && 
+					mapModel[ny][nx] != STATE_BOMB_SETTING &&
 					mapModel[ny][nx] != STATE_BOX && (
-					mapModel[ny][nx] == STATE_EMPTY ||
-					mapModel[ny][nx] == STATE_ITEM_BOMB_MAX ||
-					mapModel[ny][nx] == STATE_ITEM_BOMB_RANGE ||
-					mapModel[ny][nx] == STATE_ITEM_CHARACTER_MOVE ||
-					mapModel[ny][nx] == STATE_ITEM_CHARACTER_MOVE_REVERSE ||
-					NPCmapModel[ny][nx] == STATE_NPC_WARNING)) {
+						mapModel[ny][nx] == STATE_EMPTY ||
+						mapModel[ny][nx] == STATE_ITEM_BOMB_MAX ||
+						mapModel[ny][nx] == STATE_ITEM_BOMB_RANGE ||
+						mapModel[ny][nx] == STATE_ITEM_CHARACTER_MOVE ||
+						mapModel[ny][nx] == STATE_ITEM_CHARACTER_MOVE_REVERSE ||
+						NPCmapModel[ny][nx] == STATE_NPC_WARNING)) {
 
 					rear2++;
 					safety[rear2].x = nx;
@@ -139,17 +139,17 @@ void bfs2(int x, int y) {
 						weight2[ny][nx] = q2[rear2].dist;
 
 
-						if (nx * 2 == PlayerCurPosX && ny == PlayerCurPosY) { // ë§Œì•½ íƒìƒ‰ì¤‘ì— í”Œë ˆì´ì–´ ìœ„ì¹˜ë¥¼ ë°œê²¬í•˜ë©´
+						if (arrX_to_cursorX(nx) == PlayerCurPosX && ny + arrY_to_cursorY(ny) == PlayerCurPosY) { // ¸¸¾à Å½»öÁß¿¡ ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ ¹ß°ßÇÏ¸é
 							kill_Mode2 = 1;
 						}
 
-						if (kill_Mode2 == 1) { // kill_Mode ê°€ 1ì´ë©´ í”Œë ˆì´ì–´ë§Œ ì«“ì•„ë‹¤ë‹˜
-							dstX2 = PlayerCurPosX / 2;
-							dstY2 = PlayerCurPosY;
+						if (kill_Mode2 == 1) { // kill_Mode °¡ 1ÀÌ¸é ÇÃ·¹ÀÌ¾î¸¸ ÂÑ¾Æ´Ù´Ô
+							dstX2 = cursorX_to_arrX(PlayerCurPosX);
+							dstY2 = cursorY_to_arrY(PlayerCurPosY);
 						}
-						else if (kill_Mode2 == 0) { // ì•„ì§ í”Œë ˆì´ì–´ ìœ„ì¹˜ë¥¼ ëª»ì°¾ì•˜ë‹¤ë©´
+						else if (kill_Mode2 == 0) { // ¾ÆÁ÷ ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ ¸øÃ£¾Ò´Ù¸é
 
-							int cnt = 0; //ì—¬ê¸°ë¶€í„° ì£¼ì„ ì¹œ ê°€ì¥ ë§ì€ ë¸”ëŸ­ì„ ë¶€ìˆ  ìˆ˜ ìˆëŠ” ìœ„ì¹˜ë¡œ ê°€ëŠ” ì•Œê³ ë¦¬ì¦˜
+							int cnt = 0; //¿©±âºÎÅÍ ÁÖ¼® Ä£ °¡Àå ¸¹Àº ºí·°À» ºÎ¼ú ¼ö ÀÖ´Â À§Ä¡·Î °¡´Â ¾Ë°í¸®Áò
 							for (int j = 0; j < 4; j++) {
 								if (nx + wx2[j] < 0) {
 									continue;
@@ -167,7 +167,7 @@ void bfs2(int x, int y) {
 									cnt++;
 								}
 							}
-							if (cnt > can_Pos2) { // ëª©í‘œ ìœ„ì¹˜ë¥¼ í˜„ì¬ NPCìœ„ì¹˜ì—ì„œ ê°€ì¥ ë§ì€ ë¸”ëŸ­ì„ ë¶€ìˆ  ìˆ˜ ìˆëŠ” ìœ„ì¹˜ë¡œ ì„¤ì •í•¨
+							if (cnt > can_Pos2) { // ¸ñÇ¥ À§Ä¡¸¦ ÇöÀç NPCÀ§Ä¡¿¡¼­ °¡Àå ¸¹Àº ºí·°À» ºÎ¼ú ¼ö ÀÖ´Â À§Ä¡·Î ¼³Á¤ÇÔ
 								can_Pos2 = cnt;
 								dstX2 = nx;
 								dstY2 = ny;
@@ -182,19 +182,6 @@ void bfs2(int x, int y) {
 
 int ShortestDistance2(int npcX, int npcY) {
 
-	static int flag2 = 0;
-
-	/*if (flag2 == 0)
-	{
-		q2 = (Queue2*)calloc(((WIDTH * 2) * (HEIGHT * 2)), sizeof(Queue2));
-		safety2 = (Queue2*)calloc(((WIDTH * 2) * (HEIGHT * 2)), sizeof(Queue2));
-		flag2++;
-	}
-	else
-	{
-		memset(q2, 0, sizeof(q2));
-		memset(safety2, 0, sizeof(safety2));
-	}*/
 
 	memset(q2, 0, sizeof(q2));
 	memset(safety2, 0, sizeof(safety2));
@@ -206,19 +193,19 @@ int ShortestDistance2(int npcX, int npcY) {
 			visited2[i][j] = 0;
 		}
 	}
-	
+
 	front2 = rear2 = 0;
 	can_Pos2 = 0;				// 
 	weight2[npcY][npcX] = 0;
 
-	bfs2(npcX, npcY); // ì—¬ê¸°ì— NPCì˜ ì¶œë°œ(x,y)ì¢Œí‘œë¥¼ ì§‘ì–´ë„£ëŠ”ë‹¤.
+	bfs2(npcX, npcY); // ¿©±â¿¡ NPCÀÇ Ãâ¹ß(x,y)ÁÂÇ¥¸¦ Áı¾î³Ö´Â´Ù.
 
 	weight2[npcY][npcX] = 1;
 	int dist = q2[rear2].dist;
 
 	dfs2(dstX2, dstY2, npcX, npcY);
 
-	//ì§€ê¸ˆ one_srt_distì—ì„œ ë¬¸ì œê°€ ìƒê¹€
+	//Áö±İ one_srt_dist¿¡¼­ ¹®Á¦°¡ »ı±è
 
 	for (int i = 0; i < WIDTH; i++) {
 		for (int j = 0; j < HEIGHT; j++) {

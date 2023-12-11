@@ -16,8 +16,8 @@ typedef struct queue2 {
 	int dist;
 }Queue2;
 
-extern Queue2 *q2;
-extern Queue2 *safety2;
+extern Queue2* q2;
+extern Queue2* safety2;
 
 void bfs2(int x, int y);
 void dfs2(int x, int y, int npcX, int npcY);

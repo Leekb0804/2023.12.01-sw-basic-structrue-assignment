@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <time.h>
 #include "map.h"
-#include "cursor.h" //getcursor, setcursor í•¨ìˆ˜ë“¤ì„ íŒŒì¼ë¡œ ë”°ë¡œ ëºìŒ
+#include "cursor.h" //getcursor, setcursor ÇÔ¼öµéÀ» ÆÄÀÏ·Î µû·Î »°À½
 #include "player.h"
 
 #include "bomb.h"
@@ -16,9 +16,15 @@
 #include "calculatorDST3.h"
 #include "stage_image.h"
 
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
+int npc2_Life_flag = 1;
+int npc3_Life_flag = 2;
+static int npc_speed_phase = 0;
 
 unsigned long long start_game_time;
+
 unsigned long long current_game_time;
 unsigned long long stage_start_time;
 
@@ -37,13 +43,13 @@ int npc1_state_flag = 0;
 int npc2_state_flag = 0;
 int npc3_state_flag = 0;
 
-extern Map_box_head* map_box_head;             //í­íƒ„ì´ ëª¨ë‘ í„°ì§„ í›„ ë°•ìŠ¤ë¥¼ ì—†ì• ê¸° ìœ„í•œ ë§µ ë°•ìŠ¤ êµ¬ì¡°ì²´ ë°°ì—´ì˜ í—¤ë“œ ì„ ì–¸
+extern Map_box_head* map_box_head;             //ÆøÅºÀÌ ¸ğµÎ ÅÍÁø ÈÄ ¹Ú½º¸¦ ¾ø¾Ö±â À§ÇÑ ¸Ê ¹Ú½º ±¸Á¶Ã¼ ¹è¿­ÀÇ Çìµå ¼±¾ğ
 
 extern int mapModel[HEIGHT][WIDTH];
 extern int mapModel2[HEIGHT][WIDTH];
 extern int mapModel3[HEIGHT][WIDTH];
 
-extern int bomb_max ;
+extern int bomb_max;
 extern int player_bomb_len;
 
 int game_round;
@@ -60,8 +66,8 @@ int main(void)
 	safety = (Queue*)calloc(((WIDTH * 1) * (HEIGHT * 1)), sizeof(Queue));
 
 	Sleep(500);
-	
-	system("mode con:cols=100 lines=40 | title í¬í¬í­íƒ„");
+
+	system("mode con:cols=100 lines=40 | title Æ÷Æ÷ÆøÅº");
 
 	RemoveCursor();
 
@@ -84,7 +90,7 @@ int main(void)
 
 	NPC_current_Time = 0;
 
-	for (game_round = 5; game_round < 6; game_round++)
+	for (game_round = 0; game_round < 6; game_round++)
 	{
 		bomb_max = 1;
 		player_bomb_len = 1;
@@ -112,9 +118,16 @@ int main(void)
 		npc2_state_flag = 0;
 		npc3_state_flag = 0;
 
+		npc2_Life_flag = 1;
+		npc3_Life_flag = 2;
+		if (game_round >= 3) {
+			npc_speed_phase = 1;
+		}
+
 		if (game_round == 0)
 		{
-			
+			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö1 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			/*TimeCheck();
@@ -130,6 +143,8 @@ int main(void)
 		}
 		else if (game_round == 1)
 		{
+			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö2 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -145,6 +160,8 @@ int main(void)
 		}
 		else if (game_round == 2)
 		{
+			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö3 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -160,6 +177,8 @@ int main(void)
 		}
 		else if (game_round == 3)
 		{
+			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö4 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -175,6 +194,8 @@ int main(void)
 		}
 		else if (game_round == 4)
 		{
+			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö5 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -190,6 +211,8 @@ int main(void)
 		}
 		else if (game_round == 5)
 		{
+			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö6 ºê±İ
+
 			bombHead->next = NULL;
 			boomhead->next = NULL;
 			TimeCheck();
@@ -221,7 +244,7 @@ int main(void)
 
 			if (game_round == 0) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
-					NpcMoving();
+					NpcMoving(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1)
 				{
@@ -231,18 +254,25 @@ int main(void)
 				}
 			}
 			else if (game_round == 1) {
-				if (npc1_state_flag == 0) {
-					if (CheckNPCState() != 1)
-						NpcMoving();
+				if (npc1_state_flag == 0 && CheckNPCState() != 1) {
+					NpcMoving(npc_speed_phase);
 				}
 				if (npc2_state_flag == 0 && CheckNPCState2() != 1) {
-					NpcMoving2();
+					NpcMoving2(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1) {
 					NPC1_die();
 				}
 				if (npc2_state_flag == 1) {
-					NPC2_die();
+					if (npc2_Life_flag > 0) {
+						npcCurPosX2 = 14 * 2 + GBOARD_ORIGIN_X;
+						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
+						npc2_Life_flag--;
+						npc2_state_flag = 0;
+					}
+					else {
+						NPC2_die();
+					}
 				}
 				if (npc1_state_flag == 1 && npc2_state_flag == 1) {
 					//printf("next stage!!!\n");
@@ -252,22 +282,35 @@ int main(void)
 			}
 			else if (game_round == 2) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
-					NpcMoving();
+					NpcMoving(npc_speed_phase);
 				}
 				if (CheckNPCState2() != 1 && npc2_state_flag == 0) {
-					NpcMoving2();
+					NpcMoving2(npc_speed_phase);
 				}
 				if (CheckNPCState3() != 1 && npc3_state_flag == 0) {
-					NpcMoving3();
+					NpcMoving3(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1) {
 					NPC1_die();
 				}
 				if (npc2_state_flag == 1) {
-					NPC2_die();
+					if (npc2_Life_flag > 0) {
+						npcCurPosX2 = 14 * 2 + GBOARD_ORIGIN_X;
+						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
+						npc2_Life_flag--;
+						npc2_state_flag = 0;
+					}
 				}
 				if (npc3_state_flag == 1) {
-					NPC3_die();
+					if (npc3_Life_flag > 0) {
+						npcCurPosX3 = 2 * 2 + +GBOARD_ORIGIN_X;
+						npcCurPosY3 = 14 + +GBOARD_ORIGIN_Y;
+						npc3_Life_flag--;
+						npc3_state_flag = 0;
+					}
+					else {
+						NPC3_die();
+					}
 				}
 				if (npc1_state_flag == 1 && npc2_state_flag == 1 && npc3_state_flag == 1) {
 					//printf("next stage!!!\n");
@@ -278,7 +321,7 @@ int main(void)
 			}
 			else if (game_round == 3) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
-					NpcMoving();
+					NpcMoving(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1)
 				{
@@ -289,59 +332,73 @@ int main(void)
 			}
 			else if (game_round == 4) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
-					NpcMoving();
+					NpcMoving(npc_speed_phase);
 				}
 				if (CheckNPCState2() != 1 && npc2_state_flag == 0) {
-					NpcMoving2();
+					NpcMoving2(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1) {
 					NPC1_die();
 				}
 				if (npc2_state_flag == 1) {
-					NPC2_die();
+					if (npc2_Life_flag > 0) {
+						npcCurPosX2 = 14 * 2 + GBOARD_ORIGIN_X;
+						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
+						npc2_Life_flag--;
+						npc2_state_flag = 0;
+					}
+					else {
+						NPC2_die();
+					}
 				}
 				if (npc1_state_flag == 1 && npc2_state_flag == 1) {
-					//printf("next stage!!!\n");
 					Sleep(3000);
 					break;
 				}
 			}
 			else if (game_round == 5) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
-					NpcMoving();
+					NpcMoving(npc_speed_phase);
 				}
 				if (CheckNPCState2() != 1 && npc2_state_flag == 0) {
-					NpcMoving2();
+					NpcMoving2(npc_speed_phase);
 				}
 				if (CheckNPCState3() != 1 && npc3_state_flag == 0) {
-					NpcMoving3();
+					NpcMoving3(npc_speed_phase);
 				}
 				if (npc1_state_flag == 1) {
 					NPC1_die();
 				}
 				if (npc2_state_flag == 1) {
-					NPC2_die();
+					if (npc2_Life_flag > 0) {
+						npcCurPosX2 = 14 * 2 + GBOARD_ORIGIN_X;
+						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
+						npc2_Life_flag--;
+						npc2_state_flag = 0;
+					}
+					else {
+						NPC2_die();
+					}
 				}
 				if (npc3_state_flag == 1) {
-					NPC3_die();
+					if (npc3_Life_flag > 0) {
+						npcCurPosX3 = 2 * 2 + +GBOARD_ORIGIN_X;
+						npcCurPosY3 = 14 + +GBOARD_ORIGIN_Y;
+						npc3_Life_flag--;
+						npc3_state_flag = 0;
+					}
+					else {
+						NPC3_die();
+					}
 				}
 				if (npc1_state_flag == 1 && npc2_state_flag == 1 && npc3_state_flag == 1) {
-					//printf("next stage!!!\n");
 
 					Sleep(3000);
 					break;
 				}
 			}
-			
-			/*SetCurrentCursorPos(0, 20);
-			for (int i = 0; i < HEIGHT; i++) {
-				for (int j = 0; j < WIDTH; j++) {
-					printf("%4d", NPCmapModel[i][j]);
-				}
-				printf("\n");
-			}*/
 
-			/*SetCurrentCursorPos(0, 23);
+			/*SetCurrentCursorPos(0 + GBOARD_ORIGIN_X, 23 + GBOARD_ORIGIN_Y);
 			for (int i = 0; i < HEIGHT; i++) {
 				for (int j = 0; j < WIDTH; j++) {
 					printf("%4d", mapModel[i][j]);
@@ -349,10 +406,10 @@ int main(void)
 				printf("\n");
 			}*/
 
-			
-
-			if (game_round >= 3)
+			if (game_round >= 3) {
 				sky_bomb_drop();
+				
+			}
 		}
 	}
 	Clear_Letterdrawing();

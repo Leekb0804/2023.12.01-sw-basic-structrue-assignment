@@ -11,7 +11,7 @@ int NPC_moveLeft3();
 int NPC_moveRight3();
 int NPC_moveUp3();
 int NPC_moveDown3();
-int NpcMoving3();
+int NpcMoving3(int npc_speed_phase);
 int CheckNPCState3();
 int NPC3_die();
 #endif

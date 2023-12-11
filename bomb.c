@@ -112,7 +112,7 @@ void insertitem(Bomb* w)
 		npc2_bomb_exist_count++;
 	if (w->who_set == NPC3)
 		npc3_bomb_exist_count++;
-	
+
 }
 
 BOOM* getnode_BOOM(int x, int y, unsigned long long time)
@@ -188,6 +188,8 @@ void BombSwich_On(int x, int y)
 		npc3_bomb_exist_count--;
 
 	//mapModel[curBomb->y][curBomb->x] == 0; //맵 정보 수정. 물풍선 있던 자리에 아무것도 출력하지 않음.
+
+	Beep(220.0000, 250); // 폭발 효과음
 
 	set_Bomb_Boom(curBomb->x, curBomb->y);
 	BOOM* w = getnode_BOOM(curBomb->x, curBomb->y, time);
@@ -388,6 +390,8 @@ void TimeCheck_BOOM()
 		tmpBOOM = curBOOM->next;
 		if (cur_time - curBOOM->start_time >= 700) {
 			// bomb boom 지우는 함수 사용
+
+
 
 			set_Empty(curBOOM->x, curBOOM->y);
 			NPCmapModel[curBOOM->y][curBOOM->x] = STATE_EMPTY;

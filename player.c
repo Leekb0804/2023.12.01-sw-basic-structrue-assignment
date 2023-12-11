@@ -101,7 +101,7 @@ void PlayerMoveRight()
 	ShowPlayerBlock();
 }
 
-void PlayerMoveDown() // ?뚮젅?댁뼱 ?대룞 (??
+void PlayerMoveDown() 
 {
 	if (!DetectCollision(PlayerCurPosX, PlayerCurPosY + 1))
 	{
@@ -122,7 +122,7 @@ void PlayerMoveDown() // ?뚮젅?댁뼱 ?대룞 (??
 	ShowPlayerBlock();
 }
 
-void PlayerMoveUp() // ?뚮젅?댁뼱 ?대룞 (??
+void PlayerMoveUp() 
 {
 	if (!DetectCollision(PlayerCurPosX, PlayerCurPosY - 1))
 	{
@@ -150,9 +150,9 @@ int DetectCollision(int posX, int posY) // 임시로 장애물 GameBoardInfo로 설정하�
 	return checkObject_can_go(posX, posY);
 }
 
-void SetPlayerBomb() // ??깂?볥뒗 ?⑥닔
+void SetPlayerBomb() // 
 {
-	// 醫뚰몴 (PlayerCurPosX, PlayerCurPosY)????깂 ?볥뒗 ?⑥닔
+	
 	player_set_bomb();
 }
 
@@ -227,7 +227,10 @@ void ProcessKeyInput()
 			break;
 		case SPACE_BAR:
 			if (bomb_exist_count < bomb_max && checkObject_exist_bomb(PlayerCurPosX, PlayerCurPosY) == 0)
+			{
+				Beep(523.2511, 250); // 폭탄설치 효과음
 				SetPlayerBomb();
+			}
 			break;
 		default:
 			break;

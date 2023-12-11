@@ -714,6 +714,7 @@ void set_Bomb(int arrX, int arrY)
 
 void set_Empty(int arrX, int arrY)				//ÇØ´ç ÁÂÇ¥ °ø¹éÀ¸·Î ¸¸µé±â
 {
+
 	COORD pre = GetCurrentCursorPos();
 
 	int cursorX = arrX * 2 + GBOARD_ORIGIN_X;
@@ -742,7 +743,7 @@ void set_Bomb_Boom(int arrX, int arrY)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); // »¡°­
 
 	printf("  ");
-	SetCurrentCursorPos(cursorX, cursorY);
+	SetCurrentCursorPos(cursorX, cursorY);	
 	printf("¢Í");
 
 	SetCurrentCursorPos(pre.X, pre.Y);
@@ -969,6 +970,8 @@ void remove_generate_item_all_map_box_struct(Map_box_head* head)
 	{
 		head->next = NULL;
 
+	
+
 		set_Empty(tmp->x, tmp->y);
 		gernerate_Item(arrX_to_cursorX(tmp->x), arrY_to_cursorY(tmp->y));
 		previous = tmp;
@@ -1091,9 +1094,13 @@ void sky_bomb_drop()
 
 		if (current_game_time - recent_sky_bomb_drop_time >= 1000 && check_sky_bomb_set == 1)
 		{
+			//SetCurrentCursorPos(80, 30);
+			//printf("                          ", sky_bomb_drop_coordinate.X, sky_bomb_drop_coordinate.Y);
+			//SetCurrentCursorPos(80, 30);
+			//printf("sky bomb drop X = %d Y = %d", sky_bomb_drop_coordinate.X, sky_bomb_drop_coordinate.Y);
 
 			set_Empty(sky_bomb_drop_coordinate.X, sky_bomb_drop_coordinate.Y);
-			
+
 			Bomb* newbomb = getBombNode(sky_bomb_drop_coordinate.X, sky_bomb_drop_coordinate.Y, WHO_SET_SKY_BOMB); //x, yÁÂÇ¥ÀÇ »õ ÆøÅº ¾ò¾î¿È.
 
 			insertitem(newbomb);

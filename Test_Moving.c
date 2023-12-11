@@ -11,8 +11,9 @@
 #include "define_state.h"
 #include "bomb.h"
 
-#define flagTime 4000
-
+#define flagTime1 1000
+#define flagTime2 700
+int time_limit;
 
 extern int npcCurPosX, npcCurPosY;
 extern unsigned long long NPC_current_Time;
@@ -114,10 +115,17 @@ int NPC_moveDown() {
 }
 
 
-int NpcMoving()
+int NpcMoving(int npc_speed_phase)
 {
 	int preX = 0, preY = 0;
 	int npcX, npcY;
+
+	if (npc_speed_phase == 0) {
+		time_limit = flagTime1;
+	}
+	else if(npc_speed_phase == 1) {
+		time_limit = flagTime2;
+	}
 
 	//npcX = npcCurPosX / 2;
 	npcX = cursorX_to_arrX(npcCurPosX);
@@ -140,7 +148,7 @@ int NpcMoving()
 		if (one_srt_dist[dy][dx + 1] == 1) { // NPC 현재위치 기준 one_srt_dist의 오른쪽이 1이라면 (갈수있는길)
 			one_srt_dist[dy][dx] = 0; // 현재 위치의 one_srt_dist를 0으로 초기화 하고
 
-			if (current_game_time - NPC_current_Time > flagTime) {
+			if (current_game_time - NPC_current_Time > time_limit) {
 				NPC_current_Time = clock();
 				NPC_moveRight(); //오른쪽으로 이동
 			}
@@ -149,7 +157,7 @@ int NpcMoving()
 		else if (one_srt_dist[dy][dx - 1] == 1) {
 			one_srt_dist[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time > flagTime) {
+			if (current_game_time - NPC_current_Time > time_limit) {
 				NPC_current_Time = clock();
 				NPC_moveLeft();
 			}
@@ -158,7 +166,7 @@ int NpcMoving()
 		else if (one_srt_dist[dy + 1][dx] == 1) {
 			one_srt_dist[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time > flagTime) {
+			if (current_game_time - NPC_current_Time > time_limit) {
 				NPC_current_Time = clock();
 				NPC_moveDown();
 			}
@@ -167,7 +175,7 @@ int NpcMoving()
 		else if (one_srt_dist[dy - 1][dx] == 1) {
 			one_srt_dist[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time > flagTime) {
+			if (current_game_time - NPC_current_Time > time_limit) {
 				NPC_current_Time = clock();
 				NPC_moveUp();
 			}
@@ -176,8 +184,9 @@ int NpcMoving()
 
 		if (dx == dstX && dy == dstY) {
 
-			if (current_game_time - NPC_current_Time > flagTime) {
+			if (current_game_time - NPC_current_Time > time_limit) {
 				if (npc1_bomb_exist_count < npc1_bomb_max) {
+					Beep(523.2511, 250); // 폭탄설치 효과음
 					npc1_set_bomb();
 				}
 				//NPCmapModel[dstY][dstX] = STATE_NPC_WARNING;
@@ -216,7 +225,7 @@ int CheckNPCState()
 	}
 	if (checkPlayer_Killed_NPC(npcCurPosX, npcCurPosY, PlayerCurPosX, PlayerCurPosY) == 1) {
 		SetCurrentCursorPos(3, HEIGHT + GBOARD_ORIGIN_Y);
-		
+
 		Sleep(700);
 		GameOver_Mapdrawing();
 		return (2);

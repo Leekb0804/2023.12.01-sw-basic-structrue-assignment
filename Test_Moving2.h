@@ -10,7 +10,7 @@ int NPC_moveLeft2();
 int NPC_moveRight2();
 int NPC_moveUp2();
 int NPC_moveDown2();
-int NpcMoving2();
+int NpcMoving2(int npc_speed_phase);
 int CheckNPCState2();
 int NPC2_die();
 

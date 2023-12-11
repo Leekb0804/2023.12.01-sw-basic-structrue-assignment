@@ -16,8 +16,8 @@ typedef struct queue {
 	int dist;
 }Queue;
 
-extern Queue *q;
-extern Queue *safety;
+extern Queue* q;
+extern Queue* safety;
 
 void bfs(int x, int y);
 void dfs(int x, int y, int npcX, int npcY);

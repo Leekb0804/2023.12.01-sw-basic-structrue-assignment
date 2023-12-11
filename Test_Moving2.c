@@ -11,7 +11,9 @@
 #include "define_state.h"
 #include "bomb.h"
 
-#define flagTime 4000
+#define flagTime1 900
+#define flagTime2 600
+int time_limit;
 
 extern int npc2_state_flag;
 
@@ -109,13 +111,17 @@ int NPC_moveDown2() {
 }
 
 
-int NpcMoving2()
+int NpcMoving2(int npc_speed_phase)
 {
 	int preX = 0, preY = 0;
 	int npcX, npcY;
 
-	//npcX = npcCurPosX2 / 2;
-	//npcY = npcCurPosY2;
+	if (npc_speed_phase == 0) {
+		time_limit = flagTime1;
+	}
+	else if (npc_speed_phase == 1) {
+		time_limit = flagTime2;
+	}
 
 	npcX = cursorX_to_arrX(npcCurPosX2);
 	npcY = cursorY_to_arrY(npcCurPosY2);
@@ -134,7 +140,7 @@ int NpcMoving2()
 		if (one_srt_dist2[dy][dx + 1] == 1) { // NPC 현재위치 기준 one_srt_dist의 오른쪽이 1이라면 (갈수있는길)
 			one_srt_dist2[dy][dx] = 0; // 현재 위치의 one_srt_dist를 0으로 초기화 하고
 
-			if (current_game_time - NPC_current_Time2 > flagTime) {
+			if (current_game_time - NPC_current_Time2 > time_limit) {
 				NPC_current_Time2 = clock();
 				NPC_moveRight2(); //오른쪽으로 이동
 			}
@@ -143,7 +149,7 @@ int NpcMoving2()
 		else if (one_srt_dist2[dy][dx - 1] == 1) {
 			one_srt_dist2[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time2 > flagTime) {
+			if (current_game_time - NPC_current_Time2 > time_limit) {
 				NPC_current_Time2 = clock();
 				NPC_moveLeft2();
 			}
@@ -152,7 +158,7 @@ int NpcMoving2()
 		else if (one_srt_dist2[dy + 1][dx] == 1) {
 			one_srt_dist2[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time2 > flagTime) {
+			if (current_game_time - NPC_current_Time2 > time_limit) {
 				NPC_current_Time2 = clock();
 				NPC_moveDown2();
 			}
@@ -161,7 +167,7 @@ int NpcMoving2()
 		else if (one_srt_dist2[dy - 1][dx] == 1) {
 			one_srt_dist2[dy][dx] = 0;
 
-			if (current_game_time - NPC_current_Time2 > flagTime) {
+			if (current_game_time - NPC_current_Time2 > time_limit) {
 				NPC_current_Time2 = clock();
 				NPC_moveUp2();
 			}
@@ -170,11 +176,11 @@ int NpcMoving2()
 
 		if (dx == dstX2 && dy == dstY2) { // 목표 위치에 도착하면 mapModel의 상하좌우를 1로 초기화 하고 블럭을 지워줌 (임시 물풍선)
 
-			if (current_game_time - NPC_current_Time2 > flagTime) {
+			if (current_game_time - NPC_current_Time2 > time_limit) {
 				if (npc2_bomb_exist_count < npc2_bomb_max) {
+					Beep(523.2511, 250); // 폭탄설치 효과음
 					npc2_set_bomb();
 				}
-				//NPCmapModel[dstY2][dstX2] = STATE_NPC_WARNING;
 				NPC_current_Time2 = clock();
 				if (dx < preX) {
 					NPC_moveRight2();
@@ -209,7 +215,7 @@ int CheckNPCState2()
 	}
 	if (checkPlayer_Killed_NPC(npcCurPosX2, npcCurPosY2, PlayerCurPosX, PlayerCurPosY) == 1) {
 		SetCurrentCursorPos(3, HEIGHT + GBOARD_ORIGIN_Y);
-		
+
 		Sleep(700);
 		GameOver_Mapdrawing();
 		return (2);
@@ -227,6 +233,6 @@ int NPC2_die() {
 	SetCurrentCursorPos(npcCurPosX2, npcCurPosY2);
 	set_Empty(cursorX_to_arrX(npcCurPosX2), cursorY_to_arrY(npcCurPosY2));
 
-	/*npcCurPosX2 = 0;
-	npcCurPosY2 = 0;*/
+	npcCurPosX2 = 0;
+	npcCurPosY2 = 0;
 }
