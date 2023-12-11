@@ -203,7 +203,7 @@ int CheckNPCState3()
 	////////////Ãß°¡
 	if (checkObject_boom(npcCurPosX3, npcCurPosY3) == 1)
 	{
-		SetCurrentCursorPos(3, HEIGHT + GBOARD_ORIGIN_Y + 1);
+		SetCurrentCursorPos(3, HEIGHT + GBOARD_ORIGIN_Y + 2);
 		printf("NPC3 down!\n");
 		npc3_state_flag = 1;
 		return (1);
