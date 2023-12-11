@@ -15,6 +15,13 @@ extern int npcCurPosX2, npcCurPosY2;
 extern int npcCurPosX3, npcCurPosY3;
 extern unsigned long long set_sky_bomb_warning_time = 0;
 extern int check_sky_bomb_set = 0;
+extern int bomb_max;
+extern int player_bomb_len;
+extern int player_move;
+extern unsigned long long player_move_span;
+
+// 12월 11일 이경빈 추가
+extern int check_player_move_reverse;
 
 
 int NPCmapModel[HEIGHT][WIDTH];
@@ -1241,4 +1248,98 @@ void set_mapModel_firework()
 			mapModel[i][j] = mapModel_firework[i][j];
 		}
 	}
+}
+
+//12월 11일 서인하
+void Explain() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + WIDTH * 2 + 8), GBOARD_ORIGIN_Y + 4);
+	printf("획득한 아이템");
+
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + WIDTH * 2 + 8), GBOARD_ORIGIN_Y + 5);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); // 빨강
+	printf("⊙ bomb count +");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : %d\n", bomb_max);
+
+	
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + WIDTH * 2 + 8), GBOARD_ORIGIN_Y + 6);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); // 빨강
+	printf("⊙ bomb range ↔");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : %d\n", player_bomb_len);
+	
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + WIDTH * 2 + 8), GBOARD_ORIGIN_Y + 7);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11); // 하늘 
+	printf("▶ player move speed");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : %d\n", player_move);
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + WIDTH * 2 + 8), GBOARD_ORIGIN_Y + 8);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); // 어두운 회색
+	printf("◁ 캐릭터 역방향 이동");
+	if (check_player_move_reverse == 1)
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // 노랑
+		printf(" on   ");
+	}
+	else
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); // 어두운 회색
+		printf(" off ");
+	}
+
+
+
+
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 5);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10); // 초록
+	printf("▣");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 플레이어");
+
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 6);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13); // 보라
+	printf("★");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : NPC");
+
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 7);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf("→←↑↓ (방향키) : 캐릭터 이동");
+	
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 8);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); // 빨강
+	printf("SPACE");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 폭탄 설치");
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 9);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11); // 하늘 
+	printf("↔");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 폭발 범위 증가");
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 10);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11); // 하늘 
+	printf("+");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 폭탄 최대개수 증가");
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 11);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11); // 하늘 
+	printf("▶");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 속도 증가");
+
+	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 12);
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7); // 어두운 회색
+	printf("◁");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 캐릭터 역방향 이동");
 }

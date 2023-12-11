@@ -189,7 +189,7 @@ void BombSwich_On(int x, int y)
 
 	//mapModel[curBomb->y][curBomb->x] == 0; //맵 정보 수정. 물풍선 있던 자리에 아무것도 출력하지 않음.
 
-	Beep(220.0000, 250); // 폭발 효과음
+	//Beep(220.0000, 250); // 폭발 효과음
 
 	set_Bomb_Boom(curBomb->x, curBomb->y);
 	BOOM* w = getnode_BOOM(curBomb->x, curBomb->y, time);

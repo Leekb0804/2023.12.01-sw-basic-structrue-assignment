@@ -15,6 +15,7 @@
 
 extern int bomb_max = 1;
 extern int player_bomb_len = 1;
+extern int player_move = 1;
 extern int bomb_exist_count = 0;
 
 extern unsigned long long current_game_time;
@@ -22,6 +23,9 @@ unsigned long long recent_player_move_time = 0;
 unsigned long long player_move_span = 300;
 
 extern int check_player_move_reverse = 0;
+
+// 12월 11일 이경빈
+extern int to_debug_player_ignore_bomb;
 
 void ShowPlayerBlock()
 {
@@ -161,6 +165,9 @@ int CheckPlayerState()
 	// 현재 플레이어 좌표의 정보값에 따라 PlayerState 업데이트
 	// 업데이트된 PlayerState 값에 맞게 처리
 
+	if (to_debug_player_ignore_bomb == 1)
+		return (0);
+
 		////////////추가
 	if (checkObject_boom(PlayerCurPosX, PlayerCurPosY) == 1)
 	{
@@ -228,7 +235,7 @@ void ProcessKeyInput()
 		case SPACE_BAR:
 			if (bomb_exist_count < bomb_max && checkObject_exist_bomb(PlayerCurPosX, PlayerCurPosY) == 0)
 			{
-				Beep(523.2511, 250); // 폭탄설치 효과음
+				//Beep(523.2511, 250); // 폭탄설치 효과음
 				SetPlayerBomb();
 			}
 			break;
@@ -263,11 +270,15 @@ void apply_Item(int cursorX, int cursorY)
 	if (checkObject_character_Move_Item(cursorX, cursorY))
 	{
 		if (player_move_span > 50)
+		{
 			player_move_span -= 40;
+			player_move += 1;
+		}
 	}
 	if (checkObject_character_Move_reverse_Item(cursorX, cursorY))
 	{
 		check_player_move_reverse += 1;
 		check_player_move_reverse %= 2;
 	}
+	Explain();
 }

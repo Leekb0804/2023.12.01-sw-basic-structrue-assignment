@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <time.h>
 #include "map.h"
-#include "cursor.h" //getcursor, setcursor ÇÔ¼öµéÀ» ÆÄÀÏ·Î µû·Î »°À½
+#include "cursor.h" //getcursor, setcursor ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #include "player.h"
 
 #include "bomb.h"
@@ -43,7 +43,7 @@ int npc1_state_flag = 0;
 int npc2_state_flag = 0;
 int npc3_state_flag = 0;
 
-extern Map_box_head* map_box_head;             //ÆøÅºÀÌ ¸ğµÎ ÅÍÁø ÈÄ ¹Ú½º¸¦ ¾ø¾Ö±â À§ÇÑ ¸Ê ¹Ú½º ±¸Á¶Ã¼ ¹è¿­ÀÇ Çìµå ¼±¾ğ
+extern Map_box_head* map_box_head;             //ï¿½ï¿½Åºï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 extern int mapModel[HEIGHT][WIDTH];
 extern int mapModel2[HEIGHT][WIDTH];
@@ -51,8 +51,15 @@ extern int mapModel3[HEIGHT][WIDTH];
 
 extern int bomb_max;
 extern int player_bomb_len;
+extern int player_move;
+
+// 12ì›” 11ì¼ ì´ê²½ë¹ˆ ì¶”ê°€
+extern unsigned long long player_move_span;
+extern int bomb_exist_count;
 
 int game_round;
+
+int to_debug_player_ignore_bomb = 0;		//1ë¡œ ì„¤ì •í•˜ë©´ í”Œë ˆì´ì–´ê°€ í­íƒ„ì— ì˜í–¥ì„ ë°›ì§€ ì•ŠëŠ”ë‹¤.
 
 int main(void)
 {
@@ -67,7 +74,7 @@ int main(void)
 
 	Sleep(500);
 
-	system("mode con:cols=100 lines=40 | title Æ÷Æ÷ÆøÅº");
+	system("mode con:cols=100 lines=40 | title í¬í¬í­íƒ„");
 
 	RemoveCursor();
 
@@ -90,10 +97,13 @@ int main(void)
 
 	NPC_current_Time = 0;
 
-	for (game_round = 0; game_round < 6; game_round++)
+	for (game_round = 2; game_round < 6; game_round++)
 	{
 		bomb_max = 1;
 		player_bomb_len = 1;
+		player_move = 1;
+		player_move_span = 300;		//12ì›” 11ì¼ ì´ê²½ë¹ˆ ì¶”ê°€
+		bomb_exist_count = 0;
 
 		stage_start_time = clock();
 		PlayerState = 1;
@@ -126,7 +136,7 @@ int main(void)
 
 		if (game_round == 0)
 		{
-			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö1 ºê±İ
+			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -143,7 +153,7 @@ int main(void)
 		}
 		else if (game_round == 1)
 		{
-			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö2 ºê±İ
+			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -160,7 +170,7 @@ int main(void)
 		}
 		else if (game_round == 2)
 		{
-			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö3 ºê±İ
+			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -177,7 +187,7 @@ int main(void)
 		}
 		else if (game_round == 3)
 		{
-			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö4 ºê±İ
+			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -194,7 +204,7 @@ int main(void)
 		}
 		else if (game_round == 4)
 		{
-			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö5 ºê±İ
+			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -211,7 +221,7 @@ int main(void)
 		}
 		else if (game_round == 5)
 		{
-			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC || SND_LOOP); // ½ºÅ×ÀÌÁö6 ºê±İ
+			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC || SND_LOOP); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6 ï¿½ï¿½ï¿½
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -227,6 +237,7 @@ int main(void)
 			printf("                         \n");
 		}
 		drawMaps();
+		Explain();
 
 		while (1)
 		{
@@ -240,7 +251,6 @@ int main(void)
 				Sleep(10000);
 
 			PlayerControl();
-
 
 			if (game_round == 0) {
 				if (CheckNPCState() != 1 && npc1_state_flag == 0) {
@@ -398,10 +408,11 @@ int main(void)
 				}
 			}
 
-			/*SetCurrentCursorPos(0 + GBOARD_ORIGIN_X, 23 + GBOARD_ORIGIN_Y);
-			for (int i = 0; i < HEIGHT; i++) {
+
+			/*for (int i = 0; i < HEIGHT; i++) {
+				SetCurrentCursorPos(0 + GBOARD_ORIGIN_X + 30, 23 + GBOARD_ORIGIN_Y + i);
 				for (int j = 0; j < WIDTH; j++) {
-					printf("%4d", mapModel[i][j]);
+					printf("%4d", NPCmapModel[i][j]);
 				}
 				printf("\n");
 			}*/

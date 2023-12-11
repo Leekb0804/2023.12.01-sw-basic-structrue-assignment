@@ -186,7 +186,7 @@ int NpcMoving(int npc_speed_phase)
 
 			if (current_game_time - NPC_current_Time > time_limit) {
 				if (npc1_bomb_exist_count < npc1_bomb_max) {
-					Beep(523.2511, 250); // ÆøÅº¼³Ä¡ È¿°úÀ½
+					//(523.2511, 250); // ÆøÅº¼³Ä¡ È¿°úÀ½
 					npc1_set_bomb();
 				}
 				//NPCmapModel[dstY][dstX] = STATE_NPC_WARNING;
@@ -217,8 +217,9 @@ int CheckNPCState()
 	////////////Ãß°¡
 	if (checkObject_boom(npcCurPosX, npcCurPosY) == 1)
 	{
-		SetCurrentCursorPos(3, HEIGHT + GBOARD_ORIGIN_Y);
-		printf("NPC1 down!\n");
+		//SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y);
+		//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
+		//printf("NPC1 down!\n");
 		npc1_state_flag = 1;
 
 		return (1);

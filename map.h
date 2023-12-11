@@ -114,5 +114,8 @@ void set_mapModel_symmetry();
 void set_mapModel_popopoktan();
 void set_mapModel_firework();
 
+//11월 11일 서인하
+void Explain();
+
 
 #endif
