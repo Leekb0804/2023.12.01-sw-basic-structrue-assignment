@@ -24,6 +24,8 @@ extern int npc2_bomb_exist_count = 0;
 
 int npc2_bomb_max = 1;
 
+extern int npc2_Life_flag;
+
 void ShowNpcBlock2()
 {
 	SetCurrentCursorPos(npcCurPosX2, npcCurPosY2);
@@ -208,9 +210,12 @@ int CheckNPCState2()
 	////////////Ãß°¡
 	if (checkObject_boom(npcCurPosX2, npcCurPosY2) == 1)
 	{
-		//SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y + 1);
-		//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
-		//printf("NPC2 down!\n");
+		if (npc2_Life_flag == 0)
+		{
+			SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y + 1);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
+			printf("NPC2 down!\n");
+		}
 		npc2_state_flag = 1;
 		return (1);
 	}

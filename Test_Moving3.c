@@ -16,6 +16,7 @@
 int time_limit;
 
 extern int npc3_state_flag;
+extern int npc3_Life_flag;
 
 extern int npcCurPosX3, npcCurPosY3;
 extern unsigned long long NPC_current_Time3;
@@ -209,9 +210,12 @@ int CheckNPCState3()
 	////////////Ãß°¡
 	if (checkObject_boom(npcCurPosX3, npcCurPosY3) == 1)
 	{
-		//SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y + 2);
-		//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
-		//printf("NPC3 down!\n");
+		if (npc3_Life_flag == 0)
+		{
+			SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y + 2);
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
+			printf("NPC3 down!\n");
+		}
 		npc3_state_flag = 1;
 		return (1);
 	}
