@@ -217,9 +217,9 @@ int CheckNPCState()
 	////////////Ãß°¡
 	if (checkObject_boom(npcCurPosX, npcCurPosY) == 1)
 	{
-		//SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y);
-		//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
-		//printf("NPC1 down!\n");
+		SetCurrentCursorPos(GBOARD_ORIGIN_X, HEIGHT + GBOARD_ORIGIN_Y);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); // ³ë¶û
+		printf("NPC1 down!\n");
 		npc1_state_flag = 1;
 
 		return (1);

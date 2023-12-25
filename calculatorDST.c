@@ -137,7 +137,7 @@ void bfs(int x, int y) {
 						visited[ny][nx] = 1;
 						weight[ny][nx] = q[rear].dist;
 
-						if (arrX_to_cursorX(nx) == PlayerCurPosX && ny + arrY_to_cursorY(ny) == PlayerCurPosY) { // 만약 탐색중에 플레이어 위치를 발견하면
+						if (arrX_to_cursorX(nx) == PlayerCurPosX && arrY_to_cursorY(ny) == PlayerCurPosY) { // 만약 탐색중에 플레이어 위치를 발견하면
 							kill_Mode = 1;
 						}
 

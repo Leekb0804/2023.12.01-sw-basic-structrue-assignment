@@ -443,3 +443,17 @@ void draw_Stagemap_reset()		//스테이지출력했던 화면 공백으로 초기화
 	}
 	//여기에 다음 스테이지로 넘어가는 함수 호출
 }
+
+// 12월 22일 이경빈이 추가 (출력되는 모든 화면 지우기)
+void remove_all_drawing()
+{
+	int x, y;
+
+	for (y = 0; y < GBOARD_ORIGIN_Y + HEIGHT + 13; y++) {
+		for (x = 0; x < GBOARD_ORIGIN_X + 2 * (WIDTH) + 30; x++)
+		{
+			SetCurrentCursorPos(x, y);
+			printf(" ");
+		}
+	}
+}

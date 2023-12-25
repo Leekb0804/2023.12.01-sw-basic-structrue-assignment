@@ -29,7 +29,7 @@ void ShowNpcBlock3()
 {
 	SetCurrentCursorPos(npcCurPosX3, npcCurPosY3);
 
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13); // 보라
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 보라
 
 	printf("★");
 }

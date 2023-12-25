@@ -22,7 +22,9 @@ extern unsigned long long player_move_span;
 
 // 12월 11일 이경빈 추가
 extern int check_player_move_reverse;
-
+extern int npc1_Life_flag;
+extern int npc2_Life_flag;
+extern int npc3_Life_flag;
 
 int NPCmapModel[HEIGHT][WIDTH];
 
@@ -1062,7 +1064,7 @@ void draw_Item_chracter_move_reverse(int cursorX, int cursorY) // 캐릭터 이동 반
 	SetCurrentCursorPos(pre.X, pre.Y);
 }
 
-int checkObject_character_Move_reverse_Item(int cursorX, int cursorY)			//인자로 주어진 좌표에 이동속도 증가 아이템이 있는지
+int checkObject_character_Move_reverse_Item(int cursorX, int cursorY)			//인자로 주어진 좌표에 반대로 아이템이 있는지
 {
 	int x = (cursorX - GBOARD_ORIGIN_X) / 2;
 	int y = cursorY - GBOARD_ORIGIN_Y;
@@ -1092,7 +1094,7 @@ void sky_bomb_drop()
 	{
 
 		//printf("stage_start_time = %ld", stage_start_time);
-		if (current_game_time - recent_sky_bomb_drop_time >= 2000)
+		if (current_game_time - recent_sky_bomb_drop_time >= 3000)
 		{
 			bomb_dropping();
 			recent_sky_bomb_drop_time = clock();
@@ -1291,8 +1293,9 @@ void Explain() {
 	}
 
 
-
-
+	//SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 4);
+	//SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	//printf("npc1 life : %d npc2 life : %d npc3 life : %d", npc1_Life_flag + 1, npc2_Life_flag + 1, npc3_Life_flag + 1);
 
 	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 5);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10); // 초록
@@ -1305,7 +1308,15 @@ void Explain() {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13); // 보라
 	printf("★");
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
-	printf(" : NPC");
+	printf(" : 적 NPC1");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1); // 파랑
+	printf("  ★");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 적 NPC2");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf("  ★");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // 하양
+	printf(" : 적 NPC3");
 
 
 	SetCurrentCursorPos((GBOARD_ORIGIN_X/*BOARD_ORIGIN_X*/ + 5), GBOARD_ORIGIN_Y + HEIGHT + 7);

@@ -19,8 +19,9 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
-int npc2_Life_flag = 1;
-int npc3_Life_flag = 2;
+int npc1_Life_flag = 0;
+int npc2_Life_flag = 0;
+int npc3_Life_flag = 0;
 static int npc_speed_phase = 0;
 
 unsigned long long start_game_time;
@@ -74,7 +75,7 @@ int main(void)
 
 	Sleep(500);
 
-	system("mode con:cols=100 lines=40 | title 포포폭탄");
+	system("mode con:cols=100 lines=47 | title 포포폭탄");
 
 	RemoveCursor();
 
@@ -97,7 +98,7 @@ int main(void)
 
 	NPC_current_Time = 0;
 
-	for (game_round = 2; game_round < 6; game_round++)
+	for (game_round = 0; game_round < 6; game_round++)
 	{
 		bomb_max = 1;
 		player_bomb_len = 1;
@@ -105,7 +106,7 @@ int main(void)
 		player_move_span = 300;		//12월 11일 이경빈 추가
 		bomb_exist_count = 0;
 
-		stage_start_time = clock();
+		
 		PlayerState = 1;
 		PlayerCurPosX = arrX_to_cursorX(WIDTH - 3);		//get_Player_starting_point_x();
 		PlayerCurPosY = arrY_to_cursorY(HEIGHT - 3);  //get_Player_starting_point_y();
@@ -128,15 +129,16 @@ int main(void)
 		npc2_state_flag = 0;
 		npc3_state_flag = 0;
 
-		npc2_Life_flag = 1;
-		npc3_Life_flag = 2;
+		npc1_Life_flag = 0;
+		npc2_Life_flag = 0;
+		npc3_Life_flag = 0;
 		if (game_round >= 3) {
 			npc_speed_phase = 1;
 		}
 
 		if (game_round == 0)
 		{
-			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������1 ���
+			PlaySound(TEXT("stage1.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������1 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -153,7 +155,7 @@ int main(void)
 		}
 		else if (game_round == 1)
 		{
-			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������2 ���
+			PlaySound(TEXT("stage2.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������2 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -170,7 +172,7 @@ int main(void)
 		}
 		else if (game_round == 2)
 		{
-			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������3 ���
+			PlaySound(TEXT("stage3.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������3 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -187,7 +189,7 @@ int main(void)
 		}
 		else if (game_round == 3)
 		{
-			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������4 ���
+			PlaySound(TEXT("stage4.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������4 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -204,7 +206,7 @@ int main(void)
 		}
 		else if (game_round == 4)
 		{
-			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������5 ���
+			PlaySound(TEXT("stage5.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������5 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -221,7 +223,7 @@ int main(void)
 		}
 		else if (game_round == 5)
 		{
-			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC || SND_LOOP); // ��������6 ���
+			PlaySound(TEXT("stage6.wav"), NULL, SND_ASYNC | SND_LOOP); // ��������6 ���
 
 			bombHead->next = NULL;
 			boomhead->next = NULL;
@@ -236,6 +238,7 @@ int main(void)
 			printf("                      \n");
 			printf("                         \n");
 		}
+		stage_start_time = clock();
 		drawMaps();
 		Explain();
 
@@ -279,6 +282,7 @@ int main(void)
 						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
 						npc2_Life_flag--;
 						npc2_state_flag = 0;
+						Explain();
 					}
 					else {
 						NPC2_die();
@@ -309,6 +313,7 @@ int main(void)
 						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
 						npc2_Life_flag--;
 						npc2_state_flag = 0;
+						Explain();
 					}
 				}
 				if (npc3_state_flag == 1) {
@@ -317,6 +322,7 @@ int main(void)
 						npcCurPosY3 = 14 + +GBOARD_ORIGIN_Y;
 						npc3_Life_flag--;
 						npc3_state_flag = 0;
+						Explain();
 					}
 					else {
 						NPC3_die();
@@ -356,6 +362,7 @@ int main(void)
 						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
 						npc2_Life_flag--;
 						npc2_state_flag = 0;
+						Explain();
 					}
 					else {
 						NPC2_die();
@@ -385,6 +392,7 @@ int main(void)
 						npcCurPosY2 = 2 + GBOARD_ORIGIN_Y;
 						npc2_Life_flag--;
 						npc2_state_flag = 0;
+						Explain();
 					}
 					else {
 						NPC2_die();
@@ -396,6 +404,7 @@ int main(void)
 						npcCurPosY3 = 14 + +GBOARD_ORIGIN_Y;
 						npc3_Life_flag--;
 						npc3_state_flag = 0;
+						Explain();
 					}
 					else {
 						NPC3_die();
@@ -412,7 +421,7 @@ int main(void)
 			/*for (int i = 0; i < HEIGHT; i++) {
 				SetCurrentCursorPos(0 + GBOARD_ORIGIN_X + 30, 23 + GBOARD_ORIGIN_Y + i);
 				for (int j = 0; j < WIDTH; j++) {
-					printf("%4d", NPCmapModel[i][j]);
+					printf("%4d", mapModel [i] [j] );
 				}
 				printf("\n");
 			}*/
@@ -423,11 +432,9 @@ int main(void)
 			}
 		}
 	}
+	Sleep(20000);
+
 	Clear_Letterdrawing();
-	while (1)
-	{
-		Sleep(10000);
-	}
 
 	return (0);
 }

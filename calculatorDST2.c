@@ -121,7 +121,7 @@ void bfs2(int x, int y) {
 			for (int i = 0; i < 4; i++) {
 				int nx = q2[front2].x + dx2[i];
 				int ny = q2[front2].y + dy2[i];
-				if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT) {
+				if (nx > 0 && nx < WIDTH - 1 && ny > 0 && ny < HEIGHT - 1) {
 					if (((mapModel[ny][nx] == STATE_EMPTY ||
 						mapModel[ny][nx] == STATE_ITEM_BOMB_MAX ||
 						mapModel[ny][nx] == STATE_ITEM_BOMB_RANGE ||
@@ -129,7 +129,8 @@ void bfs2(int x, int y) {
 						NPCmapModel[ny][nx] != STATE_NPC_WARNING) &&
 						mapModel[ny][nx] != STATE_BOMB_SETTING &&
 						mapModel[ny][nx] != STATE_BOX &&
-						visited2[ny][nx] == 0) {
+						visited2[ny][nx] == 0)
+					{
 
 						rear2++;
 						q2[rear2].x = nx;
@@ -139,7 +140,7 @@ void bfs2(int x, int y) {
 						weight2[ny][nx] = q2[rear2].dist;
 
 
-						if (arrX_to_cursorX(nx) == PlayerCurPosX && ny + arrY_to_cursorY(ny) == PlayerCurPosY) { // 만약 탐색중에 플레이어 위치를 발견하면
+						if (arrX_to_cursorX(nx) == PlayerCurPosX && arrY_to_cursorY(ny) == PlayerCurPosY) { // 만약 탐색중에 플레이어 위치를 발견하면
 							kill_Mode2 = 1;
 						}
 

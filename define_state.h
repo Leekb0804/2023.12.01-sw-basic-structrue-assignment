@@ -4,7 +4,7 @@
 #define WIDTH 17
 #define HEIGHT 17
 
-#define GBOARD_ORIGIN_X 30
+#define GBOARD_ORIGIN_X 20
 #define GBOARD_ORIGIN_Y 6
 
 #define STATE_EMPTY 0
